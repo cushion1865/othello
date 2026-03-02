@@ -74,7 +74,7 @@ export default function Home() {
 
   const aiTurnRef = useRef(false);
   useEffect(() => {
-    if (!isAITurn || isThinking || aiTurnRef.current) return;
+    if (!isAITurn || aiTurnRef.current) return;
 
     aiTurnRef.current = true;
     setIsThinking(true);
@@ -90,7 +90,7 @@ export default function Home() {
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [isAITurn, board, humanColor, difficulty, isThinking, makeMove]);
+  }, [isAITurn, board, humanColor, difficulty, makeMove]);
 
   const winner =
     gameState === "gameover"
