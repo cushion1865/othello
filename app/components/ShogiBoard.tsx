@@ -37,13 +37,19 @@ export default function ShogiBoard({
     const isGote = piece.owner === 'gote';
     const isPromoted = PROMOTED_TYPES.includes(piece.type);
     return (
-      <span
-        className={`text-sm sm:text-base font-bold leading-none select-none ${
-          isPromoted ? 'text-red-500' : isGote ? 'text-gray-100' : 'text-gray-900'
-        } ${isGote ? 'rotate-180 inline-block' : ''}`}
+      <div
+        className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-sm border shadow-sm select-none
+          ${isPromoted
+            ? 'bg-red-50 border-red-400'
+            : 'bg-amber-50 border-amber-700/60'
+          }
+          ${isGote ? 'rotate-180' : ''}
+        `}
       >
-        {PIECE_LABELS[piece.type]}
-      </span>
+        <span className={`text-sm sm:text-base font-bold leading-none ${isPromoted ? 'text-red-700' : 'text-gray-900'}`}>
+          {PIECE_LABELS[piece.type]}
+        </span>
+      </div>
     );
   };
 
@@ -51,8 +57,8 @@ export default function ShogiBoard({
     const h = state.hand[owner];
     const isHuman = owner === humanPlayer;
     return (
-      <div className={`flex flex-wrap gap-1 items-center min-h-[36px] px-2 py-1 bg-amber-900/20 rounded-lg ${owner === 'gote' ? 'rotate-180' : ''}`}>
-        <span className={`text-xs text-gray-400 mr-1 ${owner === 'gote' ? 'rotate-180' : ''}`}>
+      <div className={`flex flex-wrap gap-1 items-center min-h-[40px] px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg w-full max-w-[360px] sm:max-w-[400px] ${owner === 'gote' ? 'rotate-180' : ''}`}>
+        <span className={`text-xs text-gray-400 mr-1 whitespace-nowrap ${owner === 'gote' ? 'rotate-180' : ''}`}>
           {isHuman ? '手駒（あなた）' : '手駒（AI）'}
         </span>
         {HAND_PIECE_ORDER.map(pt => {
@@ -64,17 +70,22 @@ export default function ShogiBoard({
               key={pt}
               onClick={() => isHuman ? onHandClick(pt, owner) : undefined}
               disabled={!isHuman}
-              className={`w-8 h-8 flex items-center justify-center rounded border text-sm font-bold transition-colors
+              className={`w-8 h-8 flex items-center justify-center rounded-sm border font-bold transition-colors relative
                 ${isSelected
-                  ? 'border-yellow-400 bg-yellow-400/30'
+                  ? 'border-yellow-400 bg-yellow-100 ring-2 ring-yellow-400'
                   : isHuman
-                    ? 'border-amber-600 bg-amber-800/40 hover:bg-amber-700/40 cursor-pointer'
-                    : 'border-gray-600 bg-gray-700/40 cursor-default'
+                    ? 'border-amber-700/60 bg-amber-50 hover:bg-yellow-100 cursor-pointer'
+                    : 'border-amber-700/60 bg-amber-50 cursor-default'
                 }`}
             >
-              <span className={`text-xs ${PROMOTED_TYPES.includes(pt) ? 'text-red-400' : owner === 'gote' ? 'text-gray-100' : 'text-gray-900'}`}>
-                {PIECE_LABELS[pt]}{cnt > 1 ? cnt : ''}
+              <span className="text-sm text-gray-900 font-bold leading-none">
+                {PIECE_LABELS[pt]}
               </span>
+              {cnt > 1 && (
+                <span className="absolute -bottom-1 -right-1 text-[10px] text-white bg-gray-600 rounded-full w-4 h-4 flex items-center justify-center leading-none">
+                  {cnt}
+                </span>
+              )}
             </button>
           );
         })}
@@ -89,7 +100,7 @@ export default function ShogiBoard({
 
       {/* ボード */}
       <div
-        className="border-2 border-amber-700 bg-amber-100"
+        className="border-2 border-amber-900 bg-amber-700 gap-px"
         style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)' }}
       >
         {state.board.map((row, r) =>
@@ -105,9 +116,15 @@ export default function ShogiBoard({
               <div
                 key={`${r}-${c}`}
                 onClick={() => onCellClick(r, c)}
-                className={`w-9 h-9 sm:w-10 sm:h-10 border border-amber-600 flex items-center justify-center cursor-pointer transition-colors
-                  ${isSelected ? 'bg-yellow-300' : isHighlight ? 'bg-green-300/70' : 'bg-amber-100 hover:bg-amber-200'}
-                  ${isSelectable && cell ? 'hover:bg-yellow-200' : ''}
+                className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center cursor-pointer transition-colors
+                  ${isSelected
+                    ? 'bg-yellow-300'
+                    : isHighlight
+                      ? 'bg-blue-300/80'
+                      : isSelectable && cell
+                        ? 'bg-amber-200 hover:bg-yellow-200'
+                        : 'bg-amber-200 hover:bg-amber-300'
+                  }
                 `}
               >
                 {cell && renderPiece(cell)}
