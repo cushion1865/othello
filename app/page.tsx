@@ -8,6 +8,13 @@ const games = [
     href: "/othello",
     available: true,
   },
+  {
+    id: "shogi",
+    title: "将棋",
+    description: "AIと対戦する本格将棋。難易度3段階。",
+    href: "/shogi",
+    available: true,
+  },
 ];
 
 export default function Home() {
