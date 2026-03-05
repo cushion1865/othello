@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Othello",
-  description: "AI対戦オセロゲーム",
+  title: "Game Hub",
+  description: "ブラウザで遊べるゲーム集",
 };
 
 export default function RootLayout({
