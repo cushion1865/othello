@@ -22,6 +22,13 @@ const games = [
     href: "/chess",
     available: true,
   },
+  {
+    id: "go",
+    title: "囲碁",
+    description: "AIと対戦する囲碁。9×9/13×13/19×19盤面対応。コウ・地計算完全対応。",
+    href: "/go",
+    available: true,
+  },
 ];
 
 export default function Home() {
