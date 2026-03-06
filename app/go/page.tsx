@@ -173,15 +173,14 @@ export default function GoPage() {
         disabled={isThinking || gameStatus !== 'playing' || state.currentPlayer !== humanPlayer}
       />
 
-      {/* Pass button */}
-      {gameStatus === 'playing' && state.currentPlayer === humanPlayer && !isThinking && (
-        <button
-          onClick={handlePass}
-          className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg text-sm font-semibold transition-colors"
-        >
-          パス
-        </button>
-      )}
+      {/* Pass button — always rendered to prevent layout shift */}
+      <button
+        onClick={handlePass}
+        disabled={isThinking || gameStatus !== 'playing' || state.currentPlayer !== humanPlayer}
+        className="px-6 py-2 rounded-lg text-sm font-semibold transition-colors bg-gray-700 hover:bg-gray-600 disabled:opacity-20 disabled:cursor-default disabled:hover:bg-gray-700"
+      >
+        パス
+      </button>
 
       {/* Score display (during game) */}
       <div className="text-xs text-gray-500 text-center">
