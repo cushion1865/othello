@@ -10,13 +10,23 @@ interface Props {
   onCellClick: (r: number, c: number) => void;
   onHandClick: (piece: Exclude<UnpromotedType, 'ou'>, owner: Owner) => void;
   humanPlayer: Owner;
+  lastAiMove?: Move | null;
 }
 
 const HAND_PIECE_ORDER: Exclude<UnpromotedType, 'ou'>[] = ['hisha','kaku','kin','gin','keima','kyosha','fu'];
 
 export default function ShogiBoard({
-  state, validMoves, selectedFrom, selectedDrop, onCellClick, onHandClick, humanPlayer,
+  state, validMoves, selectedFrom, selectedDrop, onCellClick, onHandClick, humanPlayer, lastAiMove,
 }: Props) {
+  // AI の直前の手のセルをハイライト
+  const aiMoveSet = new Set<string>();
+  if (lastAiMove) {
+    if (lastAiMove.type === 'move') {
+      aiMoveSet.add(`${lastAiMove.from[0]},${lastAiMove.from[1]}`);
+    }
+    aiMoveSet.add(`${lastAiMove.to[0]},${lastAiMove.to[1]}`);
+  }
+
   const highlightSet = new Set<string>();
   for (const m of validMoves) {
     if (selectedFrom) {
@@ -106,6 +116,7 @@ export default function ShogiBoard({
         {state.board.map((row, r) =>
           row.map((cell, c) => {
             const isHighlight = highlightSet.has(`${r},${c}`);
+            const isAiMove = aiMoveSet.has(`${r},${c}`);
             const isSelected = selectedFrom
               ? selectedFrom[0] === r && selectedFrom[1] === c
               : false;
@@ -121,9 +132,11 @@ export default function ShogiBoard({
                     ? 'bg-yellow-300'
                     : isHighlight
                       ? 'bg-blue-300/80'
-                      : isSelectable && cell
-                        ? 'bg-amber-200 hover:bg-yellow-200'
-                        : 'bg-amber-200 hover:bg-amber-300'
+                      : isAiMove
+                        ? 'bg-green-300/80'
+                        : isSelectable && cell
+                          ? 'bg-amber-200 hover:bg-yellow-200'
+                          : 'bg-amber-200 hover:bg-amber-300'
                   }
                 `}
               >

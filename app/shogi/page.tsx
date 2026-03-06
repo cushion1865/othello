@@ -26,6 +26,7 @@ export default function ShogiPage() {
   const [selectedFrom, setSelectedFrom] = useState<[number, number] | null>(null);
   const [selectedDrop, setSelectedDrop] = useState<Exclude<UnpromotedType, 'ou'> | null>(null);
   const [promoteDialog, setPromoteDialog] = useState<PromoteDialog | null>(null);
+  const [lastAiMove, setLastAiMove] = useState<Move | null>(null);
 
   const validMoves = getValidMoves(state, state.currentPlayer);
   const isAITurn = state.currentPlayer !== humanPlayer && gameStatus === 'playing';
@@ -38,11 +39,13 @@ export default function ShogiPage() {
     setSelectedFrom(null);
     setSelectedDrop(null);
     setPromoteDialog(null);
+    setLastAiMove(null);
   }, []);
 
   const executeMove = useCallback((move: Move) => {
     setSelectedFrom(null);
     setSelectedDrop(null);
+    setLastAiMove(null);
 
     const newState = applyMove(state, move);
     const nextPlayer = newState.currentPlayer;
@@ -156,6 +159,7 @@ export default function ShogiPage() {
         } else {
           setState(newState);
         }
+        setLastAiMove(move);
       }
       setIsThinking(false);
       aiTurnRef.current = false;
@@ -227,6 +231,7 @@ export default function ShogiPage() {
         onCellClick={handleCellClick}
         onHandClick={handleHandClick}
         humanPlayer={humanPlayer}
+        lastAiMove={lastAiMove}
       />
 
       {/* 成りダイアログ */}
