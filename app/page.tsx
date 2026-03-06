@@ -15,6 +15,13 @@ const games = [
     href: "/shogi",
     available: true,
   },
+  {
+    id: "chess",
+    title: "Chess",
+    description: "AIと対戦するチェス。キャスリング・アンパッサン完全対応。難易度3段階。",
+    href: "/chess",
+    available: true,
+  },
 ];
 
 export default function Home() {
@@ -42,7 +49,7 @@ export default function Home() {
           </Link>
         ))}
 
-        {/* 今後追加予定のゲーム枠 */}
+        {/* Coming soon placeholder */}
         <div className="bg-gray-800/40 rounded-2xl p-6 flex flex-col gap-3 border border-dashed border-gray-700 opacity-50">
           <h2 className="text-xl font-bold text-gray-500">Coming Soon</h2>
           <p className="text-gray-600 text-sm">新しいゲームを準備中...</p>
